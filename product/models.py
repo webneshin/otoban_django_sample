@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
+from djmoney.models.validators import MinMoneyValidator
 
 from core.models import Abstract_Model
 
@@ -44,13 +45,17 @@ class Product(Abstract_Model):
     """
     title = models.CharField(
         _('عنوان'),
-        max_length=200
+        max_length=200,
+        # help_text=_('لطفا نام کالا را وارد نمایید')
     )
     price = MoneyField(
         _('قیمت'),
         max_digits=15,
         decimal_places=0,
-        default_currency='IRR'
+        default_currency='IRR',
+        validators=[
+            MinMoneyValidator(0),
+        ]
     )
     category = models.ForeignKey(
         Category,
@@ -65,7 +70,6 @@ class Product(Abstract_Model):
 
     def __str__(self):
         return self.title
-
 
 
 class Product_Image(Abstract_Model):
@@ -91,4 +95,3 @@ class Product_Image(Abstract_Model):
         ordering = ('product', F('sort').asc(nulls_last=True))
         verbose_name = _('عکس کالا')
         verbose_name_plural = _('عکس های کالا')
-

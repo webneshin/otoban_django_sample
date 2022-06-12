@@ -16,9 +16,10 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework import routers
 
-from product.views import Category_ViewSet, Product_ViewSet
+from product.views import Category_ViewSet, Product_Image_ViewSet, Product_ViewSet
 
 starterURL = 'api/v1/'
 
@@ -30,7 +31,17 @@ urlpatterns = [
 router = routers.DefaultRouter()
 router.register(r'products', Product_ViewSet, )
 router.register(r'categories', Category_ViewSet, )
+router.register(r'product_images', Product_Image_ViewSet, )
 
 urlpatterns += [
     url(r'' + starterURL, include(router.urls), name='product_url', ),
+]
+
+# drf_spectacular ######################################################################################################
+urlpatterns += [
+    # YOUR PATTERNS
+    path(starterURL + 'schema/', SpectacularAPIView.as_view(), name='schema'),
+    # Optional UI:
+    path(starterURL + 'schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path(starterURL + 'schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

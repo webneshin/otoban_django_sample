@@ -141,6 +141,7 @@ INSTALLED_APPS += [
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend',
                                 'rest_framework.filters.SearchFilter', 'rest_framework.filters.OrderingFilter'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 
 }
 
@@ -148,5 +149,11 @@ REST_FRAMEWORK = {
 INSTALLED_APPS += [
     'djmoney',
 ]
-# drf_yasg #############################################################################################################
-INSTALLED_APPS += ['drf_yasg', ]
+# drf-spectacular ######################################################################################################
+INSTALLED_APPS += ['drf_spectacular', ]
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Otoban Test',
+    'DESCRIPTION': 'A small project for test',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
