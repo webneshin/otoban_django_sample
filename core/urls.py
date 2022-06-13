@@ -19,12 +19,14 @@ from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from rest_framework import routers
 
+from crypto.views import Coin_Price_View
 from product.views import Category_ViewSet, Product_Image_ViewSet, Product_ViewSet
 
 starterURL = 'api/v1/'
 
 urlpatterns = [
     path('modir/', admin.site.urls),  # changed for security
+    path(r'' + starterURL+'crypto/',Coin_Price_View.as_view(), name="Coin_Price_View")
 ]
 
 # ViewSets #############################################################################################################
