@@ -1,8 +1,10 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import F
 from django.utils.translation import ugettext_lazy as _
 from djmoney.models.fields import MoneyField
 from djmoney.models.validators import MinMoneyValidator
+from rest_framework import serializers
 
 from core.models import Abstract_Model
 
@@ -30,6 +32,14 @@ class Category(Abstract_Model):
         null=True,
     )
 
+    @property
+    def level(self):
+        if self.parent:
+            return 1 + self.parent.level
+        else:
+            return 1
+
+
     class Meta:
         verbose_name = _('دسته بندی')
         verbose_name_plural = _('دسته بندی')
@@ -37,6 +47,11 @@ class Category(Abstract_Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self, *args, **kwargs):
+        if self.level > 4:
+            raise serializers.ValidationError(_('دسته بندی نمی تواند بیش تر از 4 لایه باشد !'))
+
 
 
 class Product(Abstract_Model):
